@@ -1,0 +1,77 @@
+{% extends "website/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block nav-elements %}active{% endblock %}
+
+{% block description %}{{element.term}}: {{element.desc}}{% endblock %}
+
+{% block title %}
+    Admin Edit: {{element.identifier}} | MetaSat
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="topspacing"></div>
+    <div class="row">
+
+        <div class="col-9 offset-3" id="content">
+            <h1>Admin Edit: {{element.identifier}}</h1>
+            <h3>{{element.term}}</h3>
+            <a href="../{{element.identifier}}">https://schema.space/metasat/{{element.identifier}}</a>
+            <br/><br/>
+            <form action="{% url 'update' %}" method="post">
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="form-group col-md-9">
+                    {{ elform|crispy }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        {{ famcomp|crispy }}                        
+                    </div>
+                    <div class="form-group col-md-1">
+                                           
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{ segcomp|crispy }}
+                    </div>
+                </div>
+
+            <br/>
+            <h3>Crosswalk Identifiers</h3>
+
+                {{ exelformset.management_form }}
+                {% for form in exelformset %}
+                
+                <div class="form-row">
+                    
+                    <div class="form-group col-md-9">
+                    =================================
+                    {{ form|crispy }}
+
+                    </div>
+
+                </div>
+                {% endfor %}
+
+                <input type="hidden" name="elid" value="{{element.id}}">
+                <button type="submit" class="btn btn-primary">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="../{{element.identifier}}" id="cancel" name="cancel" class="btn btn-secondary">Cancel</a>
+            </form>
+
+            <br/><br/><br/>
+            <button type="submit" class="btn btn-danger">Deprecat Concept [nyi]</button>
+            <br/>
+            <br/>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
